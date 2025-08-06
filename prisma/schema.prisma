@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String?
+  email     String?   @unique
+  password  String
+  role      UserRole
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  siswa     Siswa?
+  guru      Guru?
+}
+
+model Siswa {
+  id      String    @id @default(cuid())
+  nis     String    @unique
+  nisn    String    @unique
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String    @unique
+  kelas   Kelas?    @relation(fields: [kelasId], references: [id])
+  kelasId String?
+  absensi Absensi[]
+  nilai   Nilai[]
+}
+
+model Guru {
+  id            String          @id @default(cuid())
+  nuptk         String          @unique
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String          @unique
+  mengajar      Jadwal[]
+}
+
+model Kelas {
+  id      String    @id @default(cuid())
+  name    String
+  siswa   Siswa[]
+  jadwal  Jadwal[]
+}
+
+model MataPelajaran {
+  id      String    @id @default(cuid())
+  name    String
+  jadwal  Jadwal[]
+  nilai   Nilai[]
+}
+
+model Jadwal {
+  id                String          @id @default(cuid())
+  hari              String
+  jamMulai          String
+  jamSelesai        String
+  kelas             Kelas           @relation(fields: [kelasId], references: [id])
+  kelasId           String
+  mataPelajaran     MataPelajaran   @relation(fields: [mataPelajaranId], references: [id])
+  mataPelajaranId   String
+  guru              Guru            @relation(fields: [guruId], references: [id])
+  guruId            String
+  jurnalMengajar    JurnalMengajar[]
+}
+
+model JurnalMengajar {
+  id                String    @id @default(cuid())
+  tanggal           DateTime  @default(now())
+  materiPembahasan  String    @db.Text
+  jadwal            Jadwal    @relation(fields: [jadwalId], references: [id], onDelete: Cascade)
+  jadwalId          String
+  absensi           Absensi[]
+}
+
+model Absensi {
+  id                String          @id @default(cuid())
+  status            StatusAbsensi
+  siswa             Siswa           @relation(fields: [siswaId], references: [id])
+  siswaId           String
+  jurnalMengajar    JurnalMengajar  @relation(fields: [jurnalMengajarId], references: [id], onDelete: Cascade)
+  jurnalMengajarId  String
+}
+
+model Nilai {
+  id              String        @id @default(cuid())
+  type            String // e.g., TUGAS, UTS, UAS
+  nilai           Float
+  siswa           Siswa         @relation(fields: [siswaId], references: [id])
+  siswaId         String
+  mataPelajaran   MataPelajaran @relation(fields: [mataPelajaranId], references: [id])
+  mataPelajaranId String
+}
+
+enum UserRole {
+  ADMIN
+  GURU
+  SISWA
+}
+
+enum StatusAbsensi {
+  HADIR
+  SAKIT
+  IZIN
+  ALPA
+}
