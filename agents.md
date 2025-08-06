@@ -60,7 +60,7 @@ Gunakan daftar ini untuk melacak progres. Tandai `[ ]` menjadi `[x]` setelah seb
 5.  **Migrasi Database:**
     Terapkan skema Prisma ke database Anda.
     ```bash
-    npx prisma migrate dev --name init
+    npx prisma migrate dev
     ```
 6.  **Jalankan Server Pengembangan:**
     ```bash
@@ -81,7 +81,9 @@ Gunakan daftar ini untuk melacak progres. Tandai `[ ]` menjadi `[x]` setelah seb
 ### **Fitur 1: Autentikasi & Manajemen Peran**
 -   **Deskripsi:** Mengamankan aplikasi dan membatasi akses berdasarkan peran (Admin, Guru, Siswa).
 -   **Rute Utama:** `app/api/auth/[...nextauth]/route.ts`, `middleware.ts`
--   **Kunci Implementasi:** Gunakan `CredentialsProvider` Next-Auth, simpan `role` di session, dan lindungi rute `/dashboard` dengan `middleware.ts`.
+-   **Kunci Implementasi:**
+    - Gunakan `CredentialsProvider` Next-Auth, simpan `role` di session, dan lindungi rute `/dashboard` dengan `middleware.ts`.
+    - **Pengguna Admin Default:** Sebuah pengguna dengan peran `ADMIN` dibuat secara otomatis saat migrasi database dijalankan. Kredensialnya didefinisikan dalam file migrasi SQL dan dijelaskan di `README.md`. Ini memastikan selalu ada pengguna awal untuk mengelola sistem.
 -   **Model DB:** `User`
 
 ### **Fitur 2 & 3: CRUD Data Master (Siswa, Guru, TU)**

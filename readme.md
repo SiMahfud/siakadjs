@@ -37,55 +37,74 @@ Sebuah aplikasi web modern yang dibangun untuk mendigitalisasi dan menyederhanak
 | Autentikasi | **Next-Auth.js** |
 | Validasi Skema | **Zod** |
 
-## 🏁 Memulai (Getting Started)
+## 🏁 Panduan Instalasi dan Menjalankan Aplikasi
 
-Ikuti langkah-langkah berikut untuk menjalankan proyek ini di lingkungan lokal Anda.
+Ikuti langkah-langkah berikut untuk menginstal dan menjalankan proyek ini di lingkungan lokal Anda.
 
-### 1. Prasyarat
+### 1. Prasyarat (Prerequisites)
 
-Pastikan Anda telah menginstal perangkat lunak berikut:
--   [Node.js](https://nodejs.org/) (v18 atau lebih baru)
--   [pnpm](https://pnpm.io/installation)
--   [Docker](https://www.docker.com/products/docker-desktop/)
+Pastikan Anda telah menginstal perangkat lunak berikut di sistem Anda:
+-   [Node.js](https://nodejs.org/) (v18 atau yang lebih baru)
+-   [pnpm](https://pnpm.io/installation) (sebagai package manager)
+-   [Docker](https://www.docker.com/products/docker-desktop/) (untuk menjalankan database)
 
-### 2. Instalasi
+### 2. Langkah-langkah Instalasi
 
-1.  **Clone repositori ini:**
+1.  **Clone Repositori**
+
+    Jika Anda belum memiliki kode sumbernya, clone repositori ini ke mesin lokal Anda.
     ```bash
+    # Ganti URL berikut dengan URL repositori yang sesuai
     git clone https://github.com/[USERNAME_ANDA]/[NAMA_REPO_ANDA].git
     cd [NAMA_REPO_ANDA]
     ```
 
-2.  **Install semua dependensi:**
+2.  **Install Dependensi Proyek**
+
+    Gunakan `pnpm` untuk menginstal semua paket yang dibutuhkan.
     ```bash
     pnpm install
     ```
 
-3.  **Setup variabel lingkungan:**
-    Salin file `.env.example` menjadi file `.env` baru.
+3.  **Konfigurasi Variabel Lingkungan (.env)**
+
+    Salin file contoh `.env.example` menjadi file baru bernama `.env`. File ini akan digunakan untuk menyimpan konfigurasi dan kredensial penting.
     ```bash
     cp .env.example .env
     ```
-    Buka file `.env` dan pastikan `DATABASE_URL` sudah sesuai (konfigurasi default sudah disesuaikan untuk Docker).
+    *Catatan: Konfigurasi default di dalam `.env.example` sudah disesuaikan untuk berjalan dengan Docker, jadi Anda tidak perlu mengubah `DATABASE_URL` pada tahap ini.*
 
-4.  **Jalankan database MariaDB:**
-    Perintah ini akan membuat dan menjalankan kontainer database di background.
+4.  **Jalankan Database (MariaDB via Docker)**
+
+    Perintah berikut akan mengunduh image MariaDB (jika belum ada) dan menjalankan kontainer database di latar belakang.
     ```bash
     docker-compose up -d
     ```
 
-5.  **Terapkan skema database:**
-    Perintah ini akan membaca skema dari `prisma/schema.prisma` dan membuat tabel-tabel yang dibutuhkan di database Anda.
+5.  **Terapkan Migrasi Database**
+
+    Jalankan perintah ini untuk membuat semua tabel yang didefinisikan di `prisma/schema.prisma` dan menerapkan semua data awal, termasuk membuat pengguna admin default.
     ```bash
     npx prisma migrate dev
     ```
 
-6.  **Jalankan server pengembangan:**
+6.  **Jalankan Server Pengembangan**
+
+    Setelah semua langkah di atas berhasil, jalankan aplikasi Next.js dalam mode pengembangan.
     ```bash
     pnpm dev
     ```
 
-🎉 Aplikasi sekarang berjalan di **http://localhost:3000**.
+    🎉 **Selesai!** Aplikasi Anda sekarang berjalan dan dapat diakses di **[http://localhost:3000](http://localhost:3000)**.
+
+### 3. Akses Aplikasi
+
+Setelah aplikasi berjalan, Anda dapat masuk menggunakan akun admin default yang telah dibuat secara otomatis oleh sistem.
+
+-   **Email:** `admin@siakad.com`
+-   **Password:** `admin123`
+
+Akun ini memiliki hak akses tertinggi dan dapat digunakan untuk mengelola seluruh aspek data master di dalam aplikasi.
 
 ## 📂 Struktur Proyek
 
