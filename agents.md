@@ -11,9 +11,9 @@ Membangun sebuah platform akademik yang **terintegrasi, modern, dan efisien**. A
 Gunakan daftar ini untuk melacak progres. Tandai `[ ]` menjadi `[x]` setelah sebuah fitur selesai dan di-merge ke branch `main`.
 
 ### Fitur Inti (Prioritas Utama)
-- [x] **Fitur 1:** Autentikasi & Manajemen Peran
-- [ ] **Fitur 2:** CRUD Data Master Siswa
-- [ ] **Fitur 3:** CRUD Data Master Guru & TU
+- [ ] **Fitur 1:** Autentikasi & Manajemen Peran
+- [x] **Fitur 2:** CRUD Data Master Siswa
+- [x] **Fitur 3:** CRUD Data Master Guru & TU
 - [ ] **Fitur 4:** Pengelolaan Jadwal Pelajaran
 - [ ] **Fitur 5:** Pengelolaan Jurnal Mengajar Guru (termasuk Absensi)
 - [ ] **Fitur 6:** Pengelolaan Nilai oleh Guru
@@ -60,7 +60,7 @@ Gunakan daftar ini untuk melacak progres. Tandai `[ ]` menjadi `[x]` setelah seb
 5.  **Migrasi Database:**
     Terapkan skema Prisma ke database Anda.
     ```bash
-    npx prisma migrate dev
+    npx prisma migrate dev --name init
     ```
 6.  **Jalankan Server Pengembangan:**
     ```bash
@@ -81,10 +81,7 @@ Gunakan daftar ini untuk melacak progres. Tandai `[ ]` menjadi `[x]` setelah seb
 ### **Fitur 1: Autentikasi & Manajemen Peran**
 -   **Deskripsi:** Mengamankan aplikasi dan membatasi akses berdasarkan peran (Admin, Guru, Siswa).
 -   **Rute Utama:** `app/api/auth/[...nextauth]/route.ts`, `middleware.ts`
--   **Kunci Implementasi:**
-    - **Middleware untuk Perlindungan Rute:** Logika utama berada di `middleware.ts`. File ini menggunakan `withAuth` dari `next-auth` untuk memeriksa token sesi pada rute yang cocok (`/admin/*`, `/guru/*`, `/siswa/*`).
-    - **Logika Otorisasi:** Middleware memeriksa peran (`role`) yang tersimpan di dalam token JWT dan membandingkannya dengan rute yang diminta. Jika peran tidak cocok (misalnya, siswa mencoba mengakses `/admin`), pengguna akan diarahkan ke halaman `/unauthorized`.
-    - **Pengguna Admin Default:** Sebuah pengguna dengan peran `ADMIN` dibuat secara otomatis saat migrasi database dijalankan untuk memastikan akses awal ke sistem.
+-   **Kunci Implementasi:** Gunakan `CredentialsProvider` Next-Auth, simpan `role` di session, dan lindungi rute `/dashboard` dengan `middleware.ts`.
 -   **Model DB:** `User`
 
 ### **Fitur 2 & 3: CRUD Data Master (Siswa, Guru, TU)**
