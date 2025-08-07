@@ -11,7 +11,7 @@ Membangun sebuah platform akademik yang **terintegrasi, modern, dan efisien**. A
 Gunakan daftar ini untuk melacak progres. Tandai `[ ]` menjadi `[x]` setelah sebuah fitur selesai dan di-merge ke branch `main`.
 
 ### Fitur Inti (Prioritas Utama)
-- [ ] **Fitur 1:** Autentikasi & Manajemen Peran
+- [x] **Fitur 1:** Autentikasi & Manajemen Peran
 - [x] **Fitur 2:** CRUD Data Master Siswa
 - [x] **Fitur 3:** CRUD Data Master Guru & TU
 - [ ] **Fitur 4:** Pengelolaan Jadwal Pelajaran
