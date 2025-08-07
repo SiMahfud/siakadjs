@@ -78,6 +78,7 @@ Pastikan Anda telah menginstal perangkat lunak berikut:
     Perintah ini akan membaca skema dari `prisma/schema.prisma` dan membuat tabel-tabel yang dibutuhkan di database Anda.
     ```bash
     npx prisma migrate dev
+    npx prisma db seed
     ```
 
 6.  **Jalankan server pengembangan:**
