@@ -52,7 +52,7 @@ export async function createGuru(prevState: FormState, formData: FormData): Prom
     };
   }
 
-  revalidatePath('/admin/guru');
+  revalidatePath('/dashboard/guru');
   return {
       message: 'Guru berhasil dibuat.',
   }
@@ -69,7 +69,7 @@ export async function deleteGuru(id: string) {
             message: 'Database Error: Gagal menghapus guru.',
         };
     }
-    revalidatePath('/admin/guru');
+    revalidatePath('/dashboard/guru');
     return {
         message: 'Guru berhasil dihapus.',
     }

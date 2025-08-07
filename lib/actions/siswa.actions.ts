@@ -56,7 +56,7 @@ export async function createSiswa(prevState: FormState, formData: FormData): Pro
     };
   }
 
-  revalidatePath('/admin/siswa');
+  revalidatePath('/dashboard/siswa');
   return {
       message: 'Siswa berhasil dibuat.',
   }
@@ -73,7 +73,7 @@ export async function deleteSiswa(id: string) {
             message: 'Database Error: Gagal menghapus siswa.',
         };
     }
-    revalidatePath('/admin/siswa');
+    revalidatePath('/dashboard/siswa');
     return {
         message: 'Siswa berhasil dihapus.',
     }
