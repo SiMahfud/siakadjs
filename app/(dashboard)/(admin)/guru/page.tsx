@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 import { DataTable } from './components/data-table';
 import { columns } from './components/columns';
 import { AddGuruDialog } from './components/add-guru-dialog';
+import { DashboardLayout } from '../../_components/layout';
 
 export default async function GuruPage() {
   const users = await prisma.user.findMany({
@@ -14,12 +15,11 @@ export default async function GuruPage() {
   });
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Manajemen Data Guru & TU</h1>
-        <AddGuruDialog />
-      </div>
-      <DataTable columns={columns} data={users} />
-    </div>
+    <DashboardLayout title="Manajemen Data Guru & TU">
+        <div className="flex items-center justify-end mb-4">
+            <AddGuruDialog />
+        </div>
+        <DataTable columns={columns} data={users} />
+    </DashboardLayout>
   );
 }

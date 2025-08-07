@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 import { DataTable } from './components/data-table';
 import { columns } from './components/columns';
 import { AddStudentDialog } from './components/add-student-dialog';
+import { DashboardLayout } from '../../_components/layout';
 
 export default async function SiswaPage() {
   const users = await prisma.user.findMany({
@@ -14,12 +15,11 @@ export default async function SiswaPage() {
   });
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Manajemen Data Siswa</h1>
-        <AddStudentDialog />
-      </div>
-      <DataTable columns={columns} data={users} />
-    </div>
+    <DashboardLayout title="Manajemen Data Siswa">
+        <div className="flex items-center justify-end mb-4">
+            <AddStudentDialog />
+        </div>
+        <DataTable columns={columns} data={users} />
+    </DashboardLayout>
   );
 }
