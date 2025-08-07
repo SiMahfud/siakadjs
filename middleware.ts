@@ -1,52 +1,38 @@
-import { getToken } from "next-auth/jwt";
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { auth } from '@/auth'; // Import from auth.ts
 
-export default withAuth(
-  // 1. The main middleware function that runs after authorization.
-  async function middleware(req) {
-    const token = await getToken({ req });
-    const { pathname } = req.nextUrl;
+export async function middleware(req: NextRequest) {
+  const session = await auth(); // Get the session
+  const { pathname } = req.nextUrl;
 
-    // @ts-ignore - token.role is a custom property added in the JWT callback.
-    const userRole = token?.role;
-
-    // 2. Redirect users who are already logged in from the login page.
-    if (token && pathname.startsWith("/login")) {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
-    }
-
-    // 3. Enforce role-based access control for admin routes.
-    if (token && pathname.startsWith("/dashboard")) {
-      const isAdminManagementRoute =
-        pathname.startsWith("/dashboard/guru") ||
-        pathname.startsWith("/dashboard/siswa");
-
-      // If a non-admin user tries to access an admin management route...
-      if (isAdminManagementRoute && userRole !== "ADMIN") {
-        // ...redirect them to the main dashboard page.
-        return NextResponse.redirect(new URL("/dashboard", req.url));
-      }
-    }
-
-    // 4. If no special conditions are met, proceed with the request.
-    return NextResponse.next();
-  },
-  // 5. Configuration for the `withAuth` middleware helper.
-  {
-    callbacks: {
-      // This callback determines if the user is authorized.
-      // It runs before the main middleware function above.
-      authorized: ({ token }) => !!token,
-    },
-    pages: {
-      // Specifies the login page, so unauthorized users are redirected there.
-      signIn: "/login",
-    },
+  // Check if user is trying to access login page while logged in
+  if (session && pathname.startsWith('/login')) {
+    return NextResponse.redirect(new URL('/dashboard', req.url));
   }
-);
 
-// 6. The matcher applies this middleware to specific paths.
+  // Check if user is trying to access a protected route without a session
+  if (!session && pathname.startsWith('/dashboard')) {
+    const loginUrl = new URL('/login', req.url);
+    loginUrl.searchParams.set('callbackUrl', req.url); // Add callbackUrl
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // Role-based access control
+  if (session && pathname.startsWith('/dashboard')) {
+    const isAdminManagementRoute =
+      pathname.startsWith('/dashboard/guru') ||
+      pathname.startsWith('/dashboard/siswa');
+
+    // @ts-ignore - session.user.role is a custom property
+    if (isAdminManagementRoute && session.user?.role !== 'ADMIN') {
+      return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
+  }
+
+  return NextResponse.next();
+}
+
 export const config = {
   matcher: [
     /*

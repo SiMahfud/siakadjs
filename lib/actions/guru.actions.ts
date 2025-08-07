@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { Prisma } from '@prisma/client';
 import { hash } from 'bcryptjs';
 import { FormState } from '@/lib/definitions';
 
@@ -28,7 +29,7 @@ export async function createGuru(prevState: FormState, formData: FormData): Prom
   try {
     const hashedPassword = await hash(password, 10);
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       const newUser = await tx.user.create({
         data: {
           name,
