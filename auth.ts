@@ -3,10 +3,10 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import prisma from '@/lib/prisma';
 import { compare } from 'bcryptjs';
-import { AuthOptions } from 'next-auth';
+import type { NextAuthConfig } from 'next-auth';
 
 // Define authOptions separately for clarity
-const authOptions: AuthOptions = {
+const authOptions: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -21,14 +21,14 @@ const authOptions: AuthOptions = {
         }
 
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+          where: { email: credentials.email as string },
         });
 
         if (!user || !user.password) {
           return null;
         }
 
-        const isPasswordValid = await compare(credentials.password, user.password);
+        const isPasswordValid = await compare(credentials.password as string, user.password);
 
         if (!isPasswordValid) {
           return null;
@@ -60,8 +60,8 @@ const authOptions: AuthOptions = {
       if (session.user) {
         session.user.id = token.sub as string;
         session.user.role = token.role as string;
-        session.user.name = token.name;
-        session.user.email = token.email;
+        session.user.name = token.name ?? '';
+        session.user.email = token.email ?? '';
       }
       return session;
     },
